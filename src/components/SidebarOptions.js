@@ -29,10 +29,7 @@ function SidebarOptions(props) {
 				initialOpen={true}
 			>
 				<div className="editor-post-featured-image">
-					<label>Choose Layouts</label>
-					<select name="layouts" onChange={changeLayout}>
-						{layouts.map(l=>(<option key={l} value={l}>{l}</option>))}
-					</select>
+					
 					<MediaUploadCheck>
 						<MediaUpload
 							onSelect={onSelectMedia}
