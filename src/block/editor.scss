@@ -6,10 +6,23 @@
  */
 
 .wp-block-cgb-block-guten-gallery-quote  {
-  background: $green;
+  background: $white;
   border: 0.2rem solid $black;
   color: $black;
   margin: 0 auto;
   max-width: 740px;
   padding: 2rem;
 }
+
+.wp-block-cgb-block-guten-gallery-quote .editor-gallery{
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: 150px 150px 300px;
+  grid-template-rows: 150px auto 50px;
+  column-gap: 10px;
+  row-gap: 15px;
+  img{    
+    max-height: 150px;
+  }
+}
+

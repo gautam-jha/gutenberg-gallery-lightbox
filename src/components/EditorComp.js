@@ -1,14 +1,13 @@
 function EditorComp(props) {
-	console.log('EditorComp',props);
+
 	const { attributes } = props;
 	
 	return (
 		<div className={props.className}>
-			<p> Select Gallery options in Sidebar</p>
-				
-			<p>
+			<em>Select or Remove Images from Sidebar</em>
+			<div class="editor-gallery">
 				{attributes.gallery  && attributes.gallery.map(media=><img key={media.mediaId} src={media.mediaUrl} />)}
-			</p>
+			</div>
 		</div>
 	);
 }

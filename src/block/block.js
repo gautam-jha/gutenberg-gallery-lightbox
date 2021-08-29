@@ -7,16 +7,12 @@
 
 //  Import CSS.
 import BlockEdit from "../components/BlockEdit";
-import EditorComp from "../components/EditorComp";
-import SidebarOptions from "../components/SidebarOptions";
 
 import "./editor.scss";
 import "./style.scss";
-const { withSelect } = wp.data;
 
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
-const { Fragment } = wp.element;
 /**
  * Register: aa Gutenberg Block.
  *
@@ -32,10 +28,24 @@ const { Fragment } = wp.element;
  */
 registerBlockType("cgb/block-guten-gallery-quote", {
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __("Gutenberg Gallery With Quote Form"), // Block title.
+	title: __("Gallery Lightbox"), // Block title.
 	icon: "shield", // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: "common", // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
-	keywords: [__("Gutenberg Gallery With Quote Form"), __("create-guten-block")],
+	keywords: [__("Gallery Lightbox"), __("create-guten-block")],
+	// set initial attributes
+
+	attributes: {
+		type: "object",
+		settings: {
+			type: "object",
+			default: {
+				layouts: ["layout1", "layout2"],
+				selectedLayout: "layout1",
+				imagePerRow: "3",
+			},
+		},
+		gallery: []
+	},
 
 	/**
 	 * The edit function describes the structure of your block in the context of the editor.
@@ -48,12 +58,15 @@ registerBlockType("cgb/block-guten-gallery-quote", {
 	 * @param {Object} props Props.
 	 * @returns {Mixed} JSX Component.
 	 */
-	attributes: {
-		gallery: [],
-		uid: Math.random(),
-	},
+	edit: (props) => {
+		console.log("ini", props);
 
-	edit: (props) => { return <div><BlockEdit {...props}/></div> },
+		return (
+			<div>
+				<BlockEdit {...props} />
+			</div>
+		);
+	},
 
 	/**
 	 * The save function defines the way in which the different attributes should be combined

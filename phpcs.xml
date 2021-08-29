@@ -73,8 +73,8 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="my-textdomain"/>
-				<element value="library-textdomain"/>
+				<element value="guten_gallery_quote"/>
+				<element value="ggl-gallery"/>
 			</property>
 		</properties>
 	</rule>

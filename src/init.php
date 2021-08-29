@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function guten_gallery_quote_cgb_block_assets() { // phpcs:ignore
 	// Register block styles for both frontend + backend.
-	$version = gmdate( 'ymd-Gis', filemtime( plugins_url( 'dist/blocks.style.build.css', dirname( __FILE__ ) ) ) );
+	$version = gmdate( 'ymd-Gis', filemtime( plugin_dir_path( dirname( __FILE__ ) ) . 'dist/blocks.style.build.css' ) );
 
 	wp_register_style(
 		'guten_gallery_quote-cgb-style-css',
@@ -38,7 +38,7 @@ function guten_gallery_quote_cgb_block_assets() { // phpcs:ignore
 		$version
 	);
 
-	$version = gmdate( 'ymd-Gis', filemtime( plugins_url( '/dist/blocks.build.js', dirname( __FILE__ ) ) ) );
+	$version = gmdate( 'ymd-Gis', filemtime( plugin_dir_path( dirname( __FILE__ ) ) . 'dist/blocks.build.js' ) );
 
 	// Register block editor script for backend.
 	wp_register_script(
@@ -49,7 +49,7 @@ function guten_gallery_quote_cgb_block_assets() { // phpcs:ignore
 		true // Enqueue the script in the footer.
 	);
 
-	$version = gmdate( 'ymd-Gis', filemtime( plugins_url( 'dist/blocks.editor.build.css', dirname( __FILE__ ) ) ) );
+	$version = gmdate( 'ymd-Gis', filemtime( plugin_dir_path( dirname( __FILE__ ) ) . 'dist/blocks.editor.build.css' ) );
 
 	// Register block editor styles for backend.
 	wp_register_style(
@@ -90,7 +90,7 @@ function guten_gallery_quote_cgb_block_assets() { // phpcs:ignore
 			// Enqueue blocks.editor.build.css in the editor only.
 			'editor_style'    => 'guten_gallery_quote-cgb-block-editor-css',
 
-			'render_callback' => 'frontend_gallery',
+			'render_callback' => 'guten_gallery_quote_frontend_gallery',
 		)
 	);
 }
@@ -104,8 +104,8 @@ add_action( 'init', 'guten_gallery_quote_cgb_block_assets' );
  * @return void
  */
 function guten_gallery_quote_ligtbox_support() {
-	$ligtboxjs   = 'helpers/swipebox.min.js';
-	$lightboxcss = 'helpers/swipebox.min.css';
+	$ligtboxjs   = 'helpers/nanogallery2.min.js';
+	$lightboxcss = 'helpers/nanogallery2.min.css';
 	$customjs    = 'helpers/custom.functions.js';
 
 	// create my own version codes.
@@ -129,19 +129,74 @@ add_action( 'wp_enqueue_scripts', 'guten_gallery_quote_ligtbox_support' );
  * @param array $attributes list of attributes from guten state.
  * @return string
  */
-function guten_gallery_quote_rontend_gallery( $attributes ) {
+function guten_gallery_quote_frontend_gallery( $attributes ) {
+	if ( ! current_user_can( 'administrator' ) ) {
+		return __( 'you are not authorized to view this block.', 'ggl-gallery' );
+	}
+
+	if ( ! isset( $attributes['gallery'] ) ) {
+		return null;
+	}
 
 	ob_start();
+	$id = 'nanogallery2' . esc_attr( uniqid() );
 
-	echo '<div class="gallery gallery-' . esc_attr( uniqid() ) . '" >';
-
+	$content .= <<<DIV
+	<div class="gallery {$id}"  id="{$id}" data-nanogallery2='{
+	    "thumbnailWidth": "400 XS200 SM300",
+		"thumbnailHeight": "auto XSauto SMauto",
+		"thumbnailBaseGridHeight" : 100,
+		"thumbnailGutterWidth" : 2,
+		"thumbnailGutterHeight" : 2,
+		"thumbnailBorderHorizontal" : 0,
+		"thumbnailBorderVertical" : 0,
+		"thumbnailAlignments": "scaled",
+		"gallerySorting": "random",
+		"galleryDisplayTransition": "slideUp",
+		"galleryResizeAnimation": true,
+		"galleryDisplayTransitionDuration": 1000,
+		"thumbnailDisplayOrder": "random",
+		"thumbnailDisplayTransition": "scaleUp",
+		"thumbnailDisplayTransitionDuration": 1500,
+		"thumbnailDisplayInterval": 60,
+		"thumbnailHoverEffect2": "imageGrayOn",
+		"galleryTheme": {
+			"thumbnail": {
+				"background": "#fff"
+			}
+		},
+		"viewerToolbar": {
+			"display": true,
+			"standard": "minimizeButton, shareButton, fullscreenButton",
+			"minimized": "minimizeButton, fullscreenButton, downloadButton, infoButton" },
+			"viewerTools": {
+				"topLeft": "label",
+				"topRight": "playPauseButton, zoomButton, fullscreenButton, closeButton"
+			},
+			"thumbnailLabel": {
+				"display": false,
+				"valign": "bottom",
+				"position": "overImage",
+				"hideIcons": false,
+				"displayDescription": true
+			}
+		}'>
+	DIV;
 	foreach ( $attributes['gallery'] as $key => $media ) {
-		?>
-			<a class="light-img" href="<?php echo esc_url( $media['mediaUrl'] ); ?>" >
-				<img src="<?php echo esc_url( $media['mediaUrl'] ); ?>" />
-			</a>
-		<?php
+		$url      = esc_url( $media['mediaUrl'] );
+		$loop     = <<<LOOP
+	<a class="light-img" href="{$url}" data-ngsrc="${url}">
+		<img src="${url}"  />
+	</a>
+	LOOP;
+		$content .= $loop;
 	}
-	echo '</div>';
+	$content .= '</div>';
+
+	?>
+
+	<?php
+
+	echo wp_kses_post( $content );
 	return ob_get_clean();
 }

@@ -5,6 +5,8 @@ const { __ } = wp.i18n; // Import __() from wp.i18n
 function SidebarOptions(props) {
 	const { attributes, setAttributes, media } = props;
 
+	const { layouts } = attributes.settings;
+
 	const removeMedia = () => {
 		props.setAttributes({gallery:[]});
 	};
@@ -13,16 +15,24 @@ function SidebarOptions(props) {
 		console.log(media);
 		const images = [];
 		media.forEach((m) => images.push({ mediaId: m.id, mediaUrl: m.url }));
-		props.setAttributes({gallery:images});
+		props.setAttributes({ gallery:images });
 	};
+
+	const changeLayout = () =>{
+		// in development
+	}
 
 	return (
 		<InspectorControls>
 			<PanelBody
-				title={__("Select block background image", "awp")}
+				title={__("Select block background image", "GGL")}
 				initialOpen={true}
 			>
 				<div className="editor-post-featured-image">
+					<label>Choose Layouts</label>
+					<select name="layouts" onChange={changeLayout}>
+						{layouts.map(l=>(<option key={l} value={l}>{l}</option>))}
+					</select>
 					<MediaUploadCheck>
 						<MediaUpload
 							onSelect={onSelectMedia}
@@ -31,46 +41,38 @@ function SidebarOptions(props) {
 							render={({ open }) => (
 								<Button
 									className={
-										attributes.mediaId == 0
+										attributes.gallery  == undefined 
 											? "editor-post-featured-image__toggle"
 											: "editor-post-featured-image__preview"
 									}
 									onClick={open}
 								>
-									{!attributes && __("Choose an image", "awp")}
-									{props.media != undefined && (
-										<ResponsiveWrapper
-											naturalWidth={props.media.media_details.width}
-											naturalHeight={props.media.media_details.height}
-										>
-											<img src={props.media.source_url} />
-										</ResponsiveWrapper>
-									)}
+									{  attributes.gallery  == undefined && __("Choose an image", "GGL")}
 								</Button>
 							)}
 							multiple={true}
 						/>
 					</MediaUploadCheck>
-					{attributes.mediaId != 0 && (
+					{attributes.gallery !== undefined && (
 						<MediaUploadCheck>
 							<MediaUpload
-								title={__("Replace image", "awp")}
+								title={__("Choose Gallery", "GGL")}
 								value={attributes.mediaId}
 								onSelect={onSelectMedia}
 								allowedTypes={["image"]}
 								render={({ open }) => (
 									<Button onClick={open} isDefault isLarge>
-										{__("Replace image", "awp")}
+										{__("Change Gallery", "GGL")}
 									</Button>
 								)}
 								multiple={true}
 							/>
 						</MediaUploadCheck>
 					)}
-					{attributes.mediaId != 0 && (
+					{attributes.gallery !== undefined && (
 						<MediaUploadCheck>
 							<Button onClick={removeMedia} isLink isDestructive>
-								{__("Remove image", "awp")}
+								{__("Remove image", "GGL")}
 							</Button>
 						</MediaUploadCheck>
 					)}
