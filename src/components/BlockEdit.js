@@ -6,11 +6,17 @@ const { __ } = wp.i18n;
 
 function BlockEdit(props) {
 
+	const onSelectMedia = (media) => {
+		console.log(media);
+		const images = [];
+		media.forEach((m) => images.push({ mediaId: m.id, mediaUrl: m.url }));
+		props.setAttributes({ gallery: images });
+	};
 
 	return (
 		<Fragment>
-			<SidebarOptions {...props}/>
-			<EditorComp {...props} />
+			<SidebarOptions {...props} onSelectMedia={onSelectMedia}/>
+			<EditorComp {...props} onSelectMedia={onSelectMedia}/>
 		</Fragment>
 	);
 }

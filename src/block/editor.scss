@@ -5,24 +5,58 @@
  * which makes it higher in priority.
  */
 
-.wp-block-cgb-block-guten-gallery-quote  {
-  background: $white;
-  border: 0.2rem solid $black;
-  color: $black;
-  margin: 0 auto;
-  max-width: 740px;
-  padding: 2rem;
+.wp-block-cgb-block-guten-gallery-quote {
+	background: $white;
+	border: 0.2rem solid $black;
+	color: $black;
+	margin: 0 auto;
+	max-width: 740px;
+	padding: 2rem;
+	hr {
+		border-color: #429abf;
+	}
 }
 
-.wp-block-cgb-block-guten-gallery-quote .editor-gallery{
-  display: grid;
-  grid-gap: 5px;
-  grid-template-columns: 150px 150px 300px;
-  grid-template-rows: 150px auto 50px;
-  column-gap: 10px;
-  row-gap: 15px;
-  img{    
-    max-height: 150px;
-  }
+.thumbnails {
+	overflow: hidden;
+	padding-left: 0px !important;
+	li {
+		float: left;
+		width: 32%;
+		position: relative;
+		padding: 1px;
+		min-height: 100px;
+		background-color: #fff;
+		border: 1px solid #ccc;
+		overflow: hidden;
+		img {
+			max-width: 100%;
+			display: block;
+			position: absolute;
+			max-height: 100px;
+			top: 50%;
+			transform: translate(-50%, -50%);
+			left: 50%;
+		}
+    .remove {
+      background: red;
+      position: absolute;
+      height: 20px;
+      width: 20px;
+      font-size: 12px;
+      text-align: center;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 1;
+      font-weight: 700;
+      right: 0;
+      top: 0px;
+  
+    }
+	}
 }
 
+.centered {
+	margin: 0 auto;
+	display: block;
+}

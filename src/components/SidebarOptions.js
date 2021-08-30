@@ -3,7 +3,7 @@ const { PanelBody, Button, ResponsiveWrapper } = wp.components;
 const { __ } = wp.i18n; // Import __() from wp.i18n
 
 function SidebarOptions(props) {
-	const { attributes, setAttributes, media } = props;
+	const { attributes, setAttributes, media,onSelectMedia } = props;
 
 	const { layouts } = attributes.settings;
 
@@ -11,12 +11,12 @@ function SidebarOptions(props) {
 		props.setAttributes({gallery:[]});
 	};
 
-	const onSelectMedia = (media) => {
-		console.log(media);
-		const images = [];
-		media.forEach((m) => images.push({ mediaId: m.id, mediaUrl: m.url }));
-		props.setAttributes({ gallery:images });
-	};
+	// const onSelectMedia = (media) => {
+	// 	console.log(media);
+	// 	const images = [];
+	// 	media.forEach((m) => images.push({ mediaId: m.id, mediaUrl: m.url }));
+	// 	props.setAttributes({ gallery:images });
+	// };
 
 	const changeLayout = () =>{
 		// in development
@@ -29,32 +29,21 @@ function SidebarOptions(props) {
 				initialOpen={true}
 			>
 				<div className="editor-post-featured-image">
-					
-					<MediaUploadCheck>
-						<MediaUpload
-							onSelect={onSelectMedia}
-							value={attributes.mediaId}
-							allowedTypes={["image"]}
-							render={({ open }) => (
-								<Button
-									className={
-										attributes.gallery  == undefined 
-											? "editor-post-featured-image__toggle"
-											: "editor-post-featured-image__preview"
-									}
-									onClick={open}
-								>
-									{  attributes.gallery  == undefined && __("Choose an image", "GGL")}
-								</Button>
-							)}
-							multiple={true}
-						/>
-					</MediaUploadCheck>
+					<label>Images per row</label>
+					<select name="layouts" onChange={changeLayout}>
+						{[2,3,4,5].map(l=>(<option key={l} value={l}>{l}</option>))}
+					</select>
+					<hr />
+					<label>Choose Layouts</label>
+					<select name="layouts" onChange={changeLayout}>
+						{layouts.map(l=>(<option key={l} value={l}>{l}</option>))}
+					</select>
+					<hr />
 					{attributes.gallery !== undefined && (
 						<MediaUploadCheck>
 							<MediaUpload
 								title={__("Choose Gallery", "GGL")}
-								value={attributes.mediaId}
+								value={attributes.gallery.map(img=> img.mediaId)}
 								onSelect={onSelectMedia}
 								allowedTypes={["image"]}
 								render={({ open }) => (
