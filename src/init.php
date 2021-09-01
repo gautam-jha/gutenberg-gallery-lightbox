@@ -104,9 +104,9 @@ add_action( 'init', 'guten_gallery_quote_cgb_block_assets' );
  * @return void
  */
 function guten_gallery_quote_ligtbox_support() {
-	$ligtboxjs   = 'helpers/nanogallery2.min.js';
-	$lightboxcss = 'helpers/nanogallery2.min.css';
-	$customjs    = 'helpers/custom.functions.js';
+	$ligtboxjs   = '../dist/helpers/nanogallery2.min.js';
+	$lightboxcss = '../dist/helpers/nanogallery2.min.css';
+	$customjs    = '../dist/helpers/custom.functions.js';
 
 	// create my own version codes.
 	$ligtboxjs_ver  = gmdate( 'ymd-Gis', filemtime( plugin_dir_path( __FILE__ ) . $ligtboxjs ) );
@@ -142,59 +142,34 @@ function guten_gallery_quote_frontend_gallery( $attributes ) {
 	$id = 'nanogallery2' . esc_attr( uniqid() );
 
 	$content .= <<<DIV
-	<div class="gallery {$id}"  id="{$id}" data-nanogallery2='{
-	    "thumbnailWidth": "400 XS200 SM300",
-		"thumbnailHeight": "auto XSauto SMauto",
-		"thumbnailBaseGridHeight" : 100,
-		"thumbnailGutterWidth" : 2,
-		"thumbnailGutterHeight" : 2,
-		"thumbnailBorderHorizontal" : 0,
-		"thumbnailBorderVertical" : 0,
-		"thumbnailAlignments": "scaled",
-		"gallerySorting": "random",
-		"galleryDisplayTransition": "slideUp",
-		"galleryResizeAnimation": true,
-		"galleryDisplayTransitionDuration": 1000,
-		"thumbnailDisplayOrder": "random",
-		"thumbnailDisplayTransition": "scaleUp",
-		"thumbnailDisplayTransitionDuration": 1500,
-		"thumbnailDisplayInterval": 60,
-		"thumbnailHoverEffect2": "imageGrayOn",
-		"galleryTheme": {
-			"thumbnail": {
-				"background": "#fff"
-			}
-		},
-		"viewerToolbar": {
-			"display": true,
-			"standard": "minimizeButton, shareButton, fullscreenButton",
-			"minimized": "minimizeButton, fullscreenButton, downloadButton, infoButton" },
-			"viewerTools": {
-				"topLeft": "label",
-				"topRight": "playPauseButton, zoomButton, fullscreenButton, closeButton"
-			},
-			"thumbnailLabel": {
-				"display": false,
-				"valign": "bottom",
-				"position": "overImage",
-				"hideIcons": false,
-				"displayDescription": true
-			}
-		}'>
+	<div class="gallery {$id}"  id="{$id}">
 	DIV;
 	foreach ( $attributes['gallery'] as $key => $media ) {
 		$url      = esc_url( $media['mediaUrl'] );
 		$loop     = <<<LOOP
-	<a class="light-img" href="{$url}" data-ngsrc="${url}">
-		<img src="${url}"  />
-	</a>
+	<a class="light-img" href="{$url}" data-ngthumb="{$url}" data-ngdesc=""></a>
 	LOOP;
 		$content .= $loop;
 	}
 	$content .= '</div>';
 
 	?>
-
+<script>
+jQuery(document).on('ready',function(){
+	jQuery("#<?php echo esc_attr( $id ); ?>").nanogallery2({
+		thumbnailWidth:   'auto',
+		thumbnailHeight:  200,
+		locationHash:     false,
+		viewerTools:      { 
+			topLeft: 'custom1',
+		},
+		// fnImgToolbarCustInit: customQuoteButton,
+		fnImgToolbarCustDisplay: customQuoteButton,
+		fnImgToolbarCustClick: quoteButtonClickHandler,
+		viewerHideToolsDelay: 9999999
+	});
+});
+</script>
 	<?php
 
 	echo wp_kses_post( $content );

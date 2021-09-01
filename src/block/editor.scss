@@ -38,21 +38,20 @@
 			transform: translate(-50%, -50%);
 			left: 50%;
 		}
-    .remove {
-      background: red;
-      position: absolute;
-      height: 20px;
-      width: 20px;
-      font-size: 12px;
-      text-align: center;
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 1;
-      font-weight: 700;
-      right: 0;
-      top: 0px;
-  
-    }
+		.remove {
+			background: red;
+			position: absolute;
+			height: 20px;
+			width: 20px;
+			font-size: 12px;
+			text-align: center;
+			border-radius: 50%;
+			cursor: pointer;
+			z-index: 1;
+			font-weight: 700;
+			right: 0;
+			top: 0px;
+		}
 	}
 }
 
