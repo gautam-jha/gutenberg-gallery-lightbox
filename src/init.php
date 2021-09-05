@@ -130,9 +130,6 @@ add_action( 'wp_enqueue_scripts', 'guten_gallery_quote_ligtbox_support' );
  * @return string
  */
 function guten_gallery_quote_frontend_gallery( $attributes ) {
-	if ( ! current_user_can( 'administrator' ) ) {
-		return __( 'you are not authorized to view this block.', 'ggl-gallery' );
-	}
 
 	if ( ! isset( $attributes['gallery'] ) ) {
 		return null;
